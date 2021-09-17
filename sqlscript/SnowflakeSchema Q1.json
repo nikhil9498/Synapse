@@ -1,0 +1,17 @@
+{
+	"name": "SnowflakeSchema Q1",
+	"properties": {
+		"content": {
+			"query": "CREATE TABLE [dbo].[DimProductCategory](\n    [ProductCategoryKey] [int] NOT NULL,\n    [ProductCategoryAlternateKey] [int] NULL,\n    [EnglishProductCategoryName] [nvarchar](50) NOT NULL,\n    [SpanishProductCategoryName] [nvarchar](50) NOT NULL,\n    [FrenchProductCategoryName] [nvarchar](50) NOT NULL\n)\nWITH\n(\n    DISTRIBUTION = REPLICATE,\n    CLUSTERED COLUMNSTORE INDEX\n);\nGO\n\nCREATE TABLE [dbo].[DimProductSubcategory](\n    [ProductSubcategoryKey] [int] NOT NULL,\n    [ProductSubcategoryAlternateKey] [int] NULL,\n    [EnglishProductSubcategoryName] [nvarchar](50) NOT NULL,\n    [SpanishProductSubcategoryName] [nvarchar](50) NOT NULL,\n    [FrenchProductSubcategoryName] [nvarchar](50) NOT NULL,\n    [ProductCategoryKey] [int] NULL\n)\nWITH\n(\n    DISTRIBUTION = REPLICATE,\n    CLUSTERED COLUMNSTORE INDEX\n);\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

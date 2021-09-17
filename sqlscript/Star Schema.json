@@ -1,5 +1,5 @@
 {
-	"name": "SQL script 1",
+	"name": "Star Schema",
 	"properties": {
 		"content": {
 			"query": "SELECT\n    Coalesce(p.[ModelName], p.[EnglishProductName]) AS [Model]\n    ,g.City AS ResellerCity\n    ,g.StateProvinceName AS StateProvince\n    ,Year(f.OrderDate) AS CalendarYear\n    ,CASE\n        WHEN Month(f.OrderDate) < 7 THEN Year(f.OrderDate)\n        ELSE Year(f.OrderDate) + 1\n    END AS FiscalYear -- Fiscal year runs from Jul to June)\n    ,Month(f.OrderDate) AS [Month]\n    ,Sum(f.OrderQuantity) AS Quantity\n    ,Sum(f.ExtendedAmount) AS Amount\n    ,Approx_count_distinct(f.SalesOrderNumber) AS UniqueOrders  \nFROM\n    [dbo].[FactResellerSales] f\nINNER JOIN [dbo].[DimReseller] r\n    ON f.ResellerKey = r.ResellerKey\nINNER JOIN [dbo].[DimGeography] g\n    ON r.GeographyKey = g.GeographyKey\nINNER JOIN [dbo].[DimProduct] p\n    ON f.[ProductKey] = p.[ProductKey]\nGROUP BY\n    Coalesce(p.[ModelName], p.[EnglishProductName])\n    ,g.City\n    ,g.StateProvinceName\n    ,Year(f.OrderDate)\n    ,CASE\n        WHEN Month(f.OrderDate) < 7 THEN Year(f.OrderDate)\n        ELSE Year(f.OrderDate) + 1\n    END\n    ,Month(f.OrderDate)\nORDER BY Amount DESC",
