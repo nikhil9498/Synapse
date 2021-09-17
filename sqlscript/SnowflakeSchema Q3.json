@@ -1,0 +1,17 @@
+{
+	"name": "SnowflakeSchema Q3",
+	"properties": {
+		"content": {
+			"query": "SELECT\n    pc.EnglishProductCategoryName AS ProductCategory\n    ,psc.EnglishProductSubcategoryName AS ProductSubcategory\n    ,Year(f.OrderDate) AS CalendarYear\n    ,CASE\n        WHEN Month(f.OrderDate) < 7 THEN Year(f.OrderDate)\n        ELSE Year(f.OrderDate) + 1\n    END AS FiscalYear -- Fiscal year runs from Jul to June)\n    ,Month(f.OrderDate) AS [Month]\n    ,Sum(f.OrderQuantity) AS Quantity\n    ,Sum(f.ExtendedAmount) AS Amount\n    ,Approx_count_distinct(f.SalesOrderNumber) AS UniqueOrders  \nFROM\n    [dbo].[FactResellerSales] f\nINNER JOIN [dbo].[DimProduct] p\n    ON f.[ProductKey] = p.[ProductKey]\nINNER JOIN [dbo].[DimProductSubcategory] psc\n    ON p.[ProductSubcategoryKey] = psc.[ProductSubcategoryKey]\nINNER JOIN [dbo].[DimProductCategory] pc\n    ON psc.[ProductCategoryKey] = pc.[ProductCategoryKey]\nGROUP BY\n    pc.EnglishProductCategoryName\n    ,psc.EnglishProductSubcategoryName\n    ,Year(f.OrderDate)\n    ,CASE\n        WHEN Month(f.OrderDate) < 7 THEN Year(f.OrderDate)\n        ELSE Year(f.OrderDate) + 1\n    END\n    ,Month(f.OrderDate)\nORDER BY Amount DESC",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SQLPool01",
+				"poolName": "SQLPool01"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
